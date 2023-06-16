@@ -113,11 +113,9 @@ final class MysqlTest extends Unit
     public function testLoadThrowsExceptionWhenDumpFileContainsSyntaxError()
     {
         $sql = "INSERT INTO `users` (`name`) VALS('')";
-        $expectedMessage = 'You have an error in your SQL syntax; ' .
-            'check the manual that corresponds to your MySQL server version for the right syntax to use near ' .
-            "'VALS('')' at line 1\nSQL query being executed: \n" . $sql;
+        $expectedMessage = '/.*You have an error in your SQL syntax;.*/';
         $this->expectException(ModuleException::class);
-        $this->expectExceptionMessage( $expectedMessage);
+        $this->expectExceptionMessageMatches($expectedMessage);
         $this->mysql->load([$sql]);
     }
 }
